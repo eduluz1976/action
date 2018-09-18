@@ -10,11 +10,17 @@
         }
     ],
     "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "eduluz1976\\action\\": "src/"
+        }
+    },
+
     "require": {
 
         
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.4@dev"
+        "phpunit/phpunit": "=7.0"
     }
 }
