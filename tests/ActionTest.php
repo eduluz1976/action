@@ -20,7 +20,11 @@ class ActionTest extends \PHPUnit\Framework\TestCase
             }
 
             public static function build($uri, $request=[], $props=[]) {
+                // placehloder
+            }
 
+            public function exec(array $additionalRequestAttributes=[]) {
+                // placeholder
             }
         };
 
@@ -41,6 +45,11 @@ class ActionTest extends \PHPUnit\Framework\TestCase
             public static function build($uri, $request=[], $props=[]) {
 
             }
+
+            public function exec(array $additionalRequestAttributes=[]) {
+                // placeholder
+            }
+
         };
 
         $response = $action->getResponse();
@@ -97,6 +106,21 @@ class ActionTest extends \PHPUnit\Framework\TestCase
 
     }
 
+
+    public function testExec1() {
+
+        $uri = '\json_encode()';
+
+        $obj = Action::factory($uri, [ ['success'=>true, 'name'=>'John'], true ]);
+
+        $res = $obj->exec();
+
+        $json = json_decode($res,true);
+
+        $this->assertTrue(is_array($json));
+        $this->assertArrayHasKey('name', $json);
+
+    }
 
 
 

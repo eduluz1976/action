@@ -6,7 +6,7 @@
          beStrictAboutOutputDuringTests="true"
          beStrictAboutTodoAnnotatedTests="true"
          verbose="true"
-         bootstrap="bootstrap.php"
+         bootstrap="bootstrap_test.php"
 >
     <testsuites>
         <testsuite name="unit">

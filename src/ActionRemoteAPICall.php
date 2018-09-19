@@ -38,5 +38,8 @@ class ActionRemoteAPICall extends Action
         return $obj;
     }
 
-    
+    public function exec(array $additionalRequestAttributes=[]) {
+        // placeholder
+    }
+
 }

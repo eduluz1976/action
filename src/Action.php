@@ -54,6 +54,15 @@ abstract class Action {
     abstract public static function checkURI($uri);
     abstract public static function build($uri);
 
+
+    /**
+     * @param array $additionalRequestAttributes
+     */
+    public function exec(array $additionalRequestAttributes=[]) {
+        $this->getRequest()->addList($additionalRequestAttributes);
+    }
+
+
     /**
      * @return Parameters
      */
