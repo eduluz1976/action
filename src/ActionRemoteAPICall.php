@@ -4,6 +4,7 @@ namespace eduluz1976\action;
 
 
 use GuzzleHttp\Exception\GuzzleException;
+use Psr\Http\Message\ResponseInterface;
 
 class ActionRemoteAPICall extends Action
 {
@@ -23,6 +24,7 @@ class ActionRemoteAPICall extends Action
     protected $options;
 
     protected $client;
+    protected $result;
 
     /**
      * @return mixed
@@ -268,6 +270,24 @@ class ActionRemoteAPICall extends Action
         return $this;
     }
 
+    /**
+     * @return ResponseInterface
+     */
+    public function getResult()
+    {
+        return $this->result;
+    }
+
+    /**
+     * @param ResponseInterface $result
+     * @return ActionRemoteAPICall
+     */
+    public function setResult($result)
+    {
+        $this->result = $result;
+        return $this;
+    }
+
 
 
 
@@ -324,8 +344,21 @@ class ActionRemoteAPICall extends Action
      */
     public static function build($uri, $request=[], $props=[]) {
 
-        if (strpos($uri,';')) {
-            list($method,$url) = explode(";",$uri);
+        $output = [];
+
+        preg_match("/[\s;]+/", $uri, $output);
+
+        //if (strpos($uri,[';',' '])) {
+        if (count($output)==1) {
+
+            preg_match("/([\w]+)+[\s;]+(.*)/", $uri, $output);
+
+            if (count($output) === 3) {
+                $method = $output[1];
+                $url = $output[2];
+            }
+
+//            list($method,$url) = explode(";",$uri);
         } else {
             $method='GET';
             $url=$uri;
@@ -373,6 +406,9 @@ class ActionRemoteAPICall extends Action
                         $this->getFullURL(),
                         $options
                         );
+
+        $this->setResult($result);
+
 
         $headers =$result->getHeaders();
 
