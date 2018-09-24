@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: eduardoluz
- * Date: 2018-09-17
- * Time: 11:56 PM
- */
-
 namespace eduluz1976\action;
 
 
