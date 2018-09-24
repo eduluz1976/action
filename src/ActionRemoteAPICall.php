@@ -194,6 +194,9 @@ class ActionRemoteAPICall extends Action
      */
     public function getHeadersSent()
     {
+        if (!$this->headersSent) {
+            $this->headersSent = new Parameters();
+        }
         return $this->headersSent;
     }
 
@@ -348,7 +351,6 @@ class ActionRemoteAPICall extends Action
 
         preg_match("/[\s;]+/", $uri, $output);
 
-        //if (strpos($uri,[';',' '])) {
         if (count($output)==1) {
 
             preg_match("/([\w]+)+[\s;]+(.*)/", $uri, $output);
@@ -357,16 +359,12 @@ class ActionRemoteAPICall extends Action
                 $method = $output[1];
                 $url = $output[2];
             }
-
-//            list($method,$url) = explode(";",$uri);
         } else {
             $method='GET';
             $url=$uri;
         }
 
         $parts = parse_url($url);
-
-//        print_r($parts);
 
         $schema = (isset($parts['scheme']))?$parts['scheme']:null;
         $user = (isset($parts['user']))?$parts['user']:null;
@@ -379,17 +377,22 @@ class ActionRemoteAPICall extends Action
 
 
         $obj = new ActionRemoteAPICall(strtoupper($method),$schema,$user,$pass, $host, $port, $path, $query, $fragment, $request);
-//        $client = new \GuzzleHttp\Client($props);
-//        $obj->setClient($client);
 
-        if (isset($props['headers'])) {
-            $obj->getHeadersSent()->addList($props['headers']);
+        if (!empty($props)) {
+
+            $obj->getOptions()->addList($props);
+
+            if (isset($props['headers'])) {
+                $obj->getHeadersSent()->addList($props['headers']);
+            }
         }
-
-
         return $obj;
     }
 
+    /**
+     * @param array $additionalRequestAttributes
+     * @return array|mixed|void
+     */
     public function exec(array $additionalRequestAttributes=[]) {
 
 
@@ -398,7 +401,6 @@ class ActionRemoteAPICall extends Action
         if (in_array($this->getMethod(),['POST','PUT','PATCH'])) {
             $options['form_params'] = $this->getRequest()->getList();
         }
-
 
         $result = $this->getClient()
                     ->request(
@@ -421,7 +423,6 @@ class ActionRemoteAPICall extends Action
         if (is_array($response)) {
             $this->getResponse()->addList($response);
         }
-
 
         return $response;
     }
@@ -470,7 +471,6 @@ class ActionRemoteAPICall extends Action
 
 
     protected function decodeResponse($text) {
-
 
         $json = json_decode($text, true);
 
