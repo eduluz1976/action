@@ -1,21 +1,16 @@
 <?php
+
 namespace eduluz1976\action\integration;
-
-
-
 
 use eduluz1976\action\Action;
 
 class ActionRemoteAPICallTest extends \PHPUnit\Framework\TestCase
 {
-
-
-
     public function testAuthOk()
     {
         $url = 'POST  http://127.0.0.1:8888/auth';
 
-        $action = Action::factory($url,[],['headers'=> ['Authorization' => 'basic 12345']]);
+        $action = Action::factory($url, [], ['headers' => ['Authorization' => 'basic 12345']]);
 
         $response = $action->exec();
 
@@ -27,22 +22,20 @@ class ActionRemoteAPICallTest extends \PHPUnit\Framework\TestCase
     {
         $url = 'POST  http://127.0.0.1:8888/auth';
 
-        $action = Action::factory($url,[],['headers'=> ['Authorization' => 'basic abcde']]);
+        $action = Action::factory($url, [], ['headers' => ['Authorization' => 'basic abcde']]);
 
         $this->expectExceptionCode(403);
 
         $response = $action->exec();
 
-
         $this->assertEquals(403, $action->getResult()->getStatusCode());
     }
-
 
     public function testRootAuthenticationRequiredRequestOk()
     {
         $url = 'GET  http://127.0.0.1:8888/';
 
-        $action = Action::factory($url,[],['headers'=> ['token' => '12345']]);
+        $action = Action::factory($url, [], ['headers' => ['token' => '12345']]);
 
         $response = $action->exec();
 
@@ -56,7 +49,7 @@ class ActionRemoteAPICallTest extends \PHPUnit\Framework\TestCase
     {
         $url = 'GET  http://127.0.0.1:8888/';
 
-        $action = Action::factory($url,[],['headers'=> ['token' => 'aaaaa']]);
+        $action = Action::factory($url, [], ['headers' => ['token' => 'aaaaa']]);
 
         $this->expectExceptionCode(403);
 
@@ -65,12 +58,11 @@ class ActionRemoteAPICallTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(403, $action->getResult()->getStatusCode());
     }
 
-
     public function testCreateUser()
     {
         $url = 'POST;http://username:password@127.0.0.1:8888/user';
 
-        $action = Action::factory($url,['name'=>'John','surname'=>'Doe']);
+        $action = Action::factory($url, ['name' => 'John', 'surname' => 'Doe']);
 
         $response = $action->exec();
 
@@ -85,13 +77,12 @@ class ActionRemoteAPICallTest extends \PHPUnit\Framework\TestCase
     {
         $url = 'PUT http://username:password@127.0.0.1:8888/user/1';
 
-        $action = Action::factory($url,['name'=>'John','surname'=>'Doe']);
+        $action = Action::factory($url, ['name' => 'John', 'surname' => 'Doe']);
 
         $response = $action->exec();
 
         $this->assertEquals(204, $action->getResult()->getStatusCode());
     }
-
 
     public function testDeleteUser()
     {
@@ -104,8 +95,6 @@ class ActionRemoteAPICallTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(204, $action->getResult()->getStatusCode());
     }
 
-
-
     public function testListUsers()
     {
         $url = 'GET http://username:password@127.0.0.1:8888/users';
@@ -117,10 +106,6 @@ class ActionRemoteAPICallTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(3, $action->getResponse()->get('users'));
         $this->assertEquals(200, $action->getResult()->getStatusCode());
     }
-
-
-
-
 
     public function testAuth2Ok()
     {
@@ -143,7 +128,6 @@ class ActionRemoteAPICallTest extends \PHPUnit\Framework\TestCase
         $response = $action->exec();
     }
 
-
     public function testXML()
     {
         $url = 'GET http://username:password2@127.0.0.1:8888/xml';
@@ -157,9 +141,7 @@ class ActionRemoteAPICallTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(200, $action->getResult()->getStatusCode());
         $this->assertEquals('John', $action->getResponse()->get('name'));
-
     }
-
 
     public function testMultiLines()
     {
@@ -172,9 +154,4 @@ class ActionRemoteAPICallTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(200, $action->getResult()->getStatusCode());
         $this->assertCount(3, $action->getResponse()->getList());
     }
-
-
-
-
-
 }

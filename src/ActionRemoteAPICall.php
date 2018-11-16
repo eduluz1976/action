@@ -2,13 +2,11 @@
 
 namespace eduluz1976\action;
 
-
 use GuzzleHttp\Exception\GuzzleException;
 use Psr\Http\Message\ResponseInterface;
 
 class ActionRemoteAPICall extends Action
 {
-
     protected $method;
     protected $schema;
     protected $user;
@@ -97,7 +95,6 @@ class ActionRemoteAPICall extends Action
         $this->path = $path;
         return $this;
     }
-
 
     /**
      * @return mixed
@@ -291,24 +288,18 @@ class ActionRemoteAPICall extends Action
         return $this;
     }
 
-
-
-
-
-
-
     /**
      * @param $uri
      * @return bool
      */
-    public static function checkURI($uri) {
-        if (strpos($uri, 'http')!==false) {
+    public static function checkURI($uri)
+    {
+        if (strpos($uri, 'http') !== false) {
             return true;
         } else {
             return false;
         }
     }
-
 
     /**
      * ActionRemoteAPICall constructor.
@@ -323,7 +314,7 @@ class ActionRemoteAPICall extends Action
      * @param null|string $fragment
      * @param array $request
      */
-    public function __construct($method='GET', $schema=null,$user=null,$password=null, $hostname=null, $port=null, $path=null, $query=null, $fragment=null, $request=[])
+    public function __construct($method = 'GET', $schema = null, $user = null, $password = null, $hostname = null, $port = null, $path = null, $query = null, $fragment = null, $request = [])
     {
         $this->setMethod($method);
         $this->setSchema($schema);
@@ -338,21 +329,19 @@ class ActionRemoteAPICall extends Action
         $this->getRequest()->addList($request);
     }
 
-
     /**
      * @param $uri
      * @param array $request
      * @param array $props
      * @return ActionRemoteAPICall
      */
-    public static function build($uri, $request=[], $props=[]) {
-
+    public static function build($uri, $request = [], $props = [])
+    {
         $output = [];
 
         preg_match("/[\s;]+/", $uri, $output);
 
-        if (count($output)==1) {
-
+        if (count($output) == 1) {
             preg_match("/([\w]+)+[\s;]+(.*)/", $uri, $output);
 
             if (count($output) === 3) {
@@ -360,26 +349,24 @@ class ActionRemoteAPICall extends Action
                 $url = $output[2];
             }
         } else {
-            $method='GET';
-            $url=$uri;
+            $method = 'GET';
+            $url = $uri;
         }
 
         $parts = parse_url($url);
 
-        $schema = (isset($parts['scheme']))?$parts['scheme']:null;
-        $user = (isset($parts['user']))?$parts['user']:null;
-        $pass = (isset($parts['pass']))?$parts['pass']:null;
-        $host = (isset($parts['host']))?$parts['host']:null;
-        $port = (isset($parts['port']))?$parts['port']:null;
-        $path = (isset($parts['path']))?$parts['path']:null;
-        $query = (isset($parts['query']))?$parts['query']:null;
-        $fragment = (isset($parts['fragment']))?$parts['fragment']:null;
+        $schema = (isset($parts['scheme'])) ? $parts['scheme'] : null;
+        $user = (isset($parts['user'])) ? $parts['user'] : null;
+        $pass = (isset($parts['pass'])) ? $parts['pass'] : null;
+        $host = (isset($parts['host'])) ? $parts['host'] : null;
+        $port = (isset($parts['port'])) ? $parts['port'] : null;
+        $path = (isset($parts['path'])) ? $parts['path'] : null;
+        $query = (isset($parts['query'])) ? $parts['query'] : null;
+        $fragment = (isset($parts['fragment'])) ? $parts['fragment'] : null;
 
-
-        $obj = new ActionRemoteAPICall(strtoupper($method),$schema,$user,$pass, $host, $port, $path, $query, $fragment, $request);
+        $obj = new ActionRemoteAPICall(strtoupper($method), $schema, $user, $pass, $host, $port, $path, $query, $fragment, $request);
 
         if (!empty($props)) {
-
             $obj->getOptions()->addList($props);
 
             if (isset($props['headers'])) {
@@ -393,12 +380,11 @@ class ActionRemoteAPICall extends Action
      * @param array $additionalRequestAttributes
      * @return array|mixed|void
      */
-    public function exec(array $additionalRequestAttributes=[]) {
+    public function exec(array $additionalRequestAttributes = [])
+    {
+        $options = $this->getOptions()->getList() ?? [];
 
-
-        $options = $this->getOptions()->getList()??[];
-
-        if (in_array($this->getMethod(),['POST','PUT','PATCH'])) {
+        if (in_array($this->getMethod(), ['POST', 'PUT', 'PATCH'])) {
             $options['form_params'] = $this->getRequest()->getList();
         }
 
@@ -411,8 +397,7 @@ class ActionRemoteAPICall extends Action
 
         $this->setResult($result);
 
-
-        $headers =$result->getHeaders();
+        $headers = $result->getHeaders();
 
         $this->getHeadersReceived()->addList($headers);
 
@@ -427,20 +412,20 @@ class ActionRemoteAPICall extends Action
         return $response;
     }
 
-
     /**
      * @return string
      */
-    public function getFullURL() {
+    public function getFullURL()
+    {
         $url = '';
 
-        $url .= ($this->getSchema())?$this->getSchema():'http';
+        $url .= ($this->getSchema()) ? $this->getSchema() : 'http';
         $url .= '://';
 
         if ($this->getUser()) {
             $url .= $this->getUser();
             if ($this->getPassword()) {
-                $url .= ':'.$this->getPassword();
+                $url .= ':' . $this->getPassword();
             }
             $url .= '@';
         }
@@ -452,33 +437,30 @@ class ActionRemoteAPICall extends Action
         }
 
         if ($this->getPort()) {
-            $url .= ':'.$this->getPort();
+            $url .= ':' . $this->getPort();
         }
 
         $url .= $this->getPath();
 
         if ($this->getQuery()) {
-            $url .= '?'.$this->getQuery();
+            $url .= '?' . $this->getQuery();
         }
 
         if ($this->getFragment()) {
-            $url .= '#'.$this->getFragment();
+            $url .= '#' . $this->getFragment();
         }
 
         return $url;
-
     }
 
-
-    protected function decodeResponse($text) {
-
+    protected function decodeResponse($text)
+    {
         $json = json_decode($text, true);
 
         if (is_array($json)) {
             $this->getResponse()->addList($json);
             return $json;
         }
-
 
         // test XML
         libxml_use_internal_errors(true);
@@ -497,10 +479,7 @@ class ActionRemoteAPICall extends Action
         }
 
         // otherwise: single line
-        $this->getResponse()->add(0,$text);
+        $this->getResponse()->add(0, $text);
         return [$text];
-
     }
-
-
 }

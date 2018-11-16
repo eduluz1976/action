@@ -1,12 +1,9 @@
 <?php
+
 namespace eduluz1976\action;
-
-
-
 
 class ActionRemoteAPICallTest extends \PHPUnit\Framework\TestCase
 {
-
     public function testGetAttributes()
     {
         $url = 'post;https://username:password@my.hostname:9090/path?arg=value#anchor';
@@ -20,24 +17,19 @@ class ActionRemoteAPICallTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('my.hostname', $action->getHostname());
         $this->assertEquals('9090', $action->getPort());
         $this->assertEquals('/path', $action->getPath());
-
-
     }
 
     public function testAdditionalParameters()
     {
-
         $url = 'http://username:password@hostname:9090/path?arg=value#anchor';
 
-        $action = Action::factory($url,['name'=>'John','surname'=>'Doe']);
-        
-        $this->assertEquals('John', $action->getRequest()->get('name'));
+        $action = Action::factory($url, ['name' => 'John', 'surname' => 'Doe']);
 
+        $this->assertEquals('John', $action->getRequest()->get('name'));
     }
 
     public function testExec()
     {
-
         $action = Action::factory('\sampleFunction1()', ['test1']);
         $response = $action->exec();
 
@@ -50,6 +42,5 @@ class ActionRemoteAPICallTest extends \PHPUnit\Framework\TestCase
         $action->setFunctionName('sampleFunction2');
 
         $this->assertEquals('sampleFunction2', $action->getFunctionName());
-
     }
 }

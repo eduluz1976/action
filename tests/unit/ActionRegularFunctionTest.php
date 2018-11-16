@@ -8,25 +8,17 @@
 
 namespace eduluz1976\action;
 
-
-
-
 class ActionRegularFunctionTest extends \PHPUnit\Framework\TestCase
 {
-
     public function testGetFunctionName()
     {
-
-        $action = Action::factory('sampleFunction1()',['test1']);
-
+        $action = Action::factory('sampleFunction1()', ['test1']);
 
         $this->assertEquals('sampleFunction1', $action->getFunctionName());
-
     }
 
     public function testExec()
     {
-
         $action = Action::factory('\sampleFunction1()', ['test1']);
         $response = $action->exec();
 
@@ -39,6 +31,5 @@ class ActionRegularFunctionTest extends \PHPUnit\Framework\TestCase
         $action->setFunctionName('sampleFunction2');
 
         $this->assertEquals('sampleFunction2', $action->getFunctionName());
-
     }
 }
