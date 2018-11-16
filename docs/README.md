@@ -96,3 +96,37 @@ Array
 )
 
 ```
+
+
+
+### URL call
+
+The class ``ActionURLCallTest`` perform remote URL calls, and return the contents parsed.
+
+
+#### Example
+
+
+Let's suppose you want to make a call to an endpoint:
+```php
+
+$url = 'post;https://username:password@my.hostname:9090/path?arg=value#anchor';
+
+$action = Action::factory($url);
+
+$response = $action->exec();
+
+```
+
+
+## Testing
+
+To perform tests, just run ``vendor/bin/phpunit`` from root project folder. 
+
+But to run the **integration tests**, is necessary start the local server to do it. On this case, just execute the script 
+on ~/bin/run_integration_tests.sh , and in other terminal window, run ``phpunit``.
+
+
+
+
+
