@@ -1,15 +1,20 @@
 <?php
+
+namespace tests\eduluz1976\unit;
+
+use eduluz1976\action\Action;
+
 /**
- * Created by PhpStorm.
- * User: eduardoluz
- * Date: 2018-09-18
- * Time: 4:47 PM
+ * Class ActionRegularFunctionTest
+ * @package tests\eduluz1976\unit
  */
-
-namespace eduluz1976\action;
-
 class ActionRegularFunctionTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * Tests if the function name was setted properly.
+     *
+     * @throws \eduluz1976\action\exception\InvalidURIException
+     */
     public function testGetFunctionName()
     {
         $action = Action::factory('sampleFunction1()', ['test1']);
@@ -17,6 +22,12 @@ class ActionRegularFunctionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('sampleFunction1', $action->getFunctionName());
     }
 
+    /**
+     * Tests if function is executed properly.
+     *
+     * @throws \eduluz1976\action\exception\FunctionNotFoundException
+     * @throws \eduluz1976\action\exception\InvalidURIException
+     */
     public function testExec()
     {
         $action = Action::factory('\sampleFunction1()', ['test1']);
@@ -25,6 +36,11 @@ class ActionRegularFunctionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('(((test1)))', $response);
     }
 
+    /**
+     * Tests if works the function name override method.
+     *
+     * @throws \eduluz1976\action\exception\InvalidURIException
+     */
     public function testSetFunctionName()
     {
         $action = Action::factory('sampleFunction1()');

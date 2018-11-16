@@ -1,11 +1,21 @@
 <?php
 
-namespace eduluz1976\action;
+namespace tests\eduluz1976\unit;
 
+use eduluz1976\action\Parameters;
 use PHPUnit\Framework\TestCase;
 
-class ParametersTest extends \PHPUnit\Framework\TestCase
+/**
+ * Class ParametersTest
+ * @package tests\eduluz1976\unit
+ */
+class ParametersTest extends TestCase
 {
+    /**
+     * Test add some value on object
+     *
+     * @throws \Exception
+     */
     public function testAddValue()
     {
         $originalName = 'John';
@@ -19,6 +29,11 @@ class ParametersTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($originalName, $name);
     }
 
+    /**
+     * Test add an associative array to an Parameter instance
+     *
+     * @throws \Exception
+     */
     public function testAddSetOfValues()
     {
         $attributes = [
@@ -34,6 +49,11 @@ class ParametersTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(count($attributes), $p->getList());
     }
 
+    /**
+     * Test remove an item value.
+     *
+     * @throws \Exception
+     */
     public function testRemoveValue()
     {
         $attributes = [
@@ -51,6 +71,11 @@ class ParametersTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(count($attributes) - 1, $p->getList());
     }
 
+    /**
+     * Test if the method 'has' works.
+     *
+     * @throws \Exception
+     */
     public function testHasAttribute()
     {
         $attributes = [
