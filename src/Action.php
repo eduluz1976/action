@@ -35,12 +35,14 @@ abstract class Action
      */
     public static function factory($uri, $request = [], $props = [])
     {
-        if (ActionRemoteAPICall::checkURI($uri)) {
-            return ActionRemoteAPICall::build($uri, $request, $props);
+        if (ActionURLCall::checkURI($uri)) {
+            return ActionURLCall::build($uri, $request, $props);
         } elseif (ActionClassMethod::checkURI($uri)) {
             return ActionClassMethod::build($uri, $request, $props);
         } elseif (ActionRegularFunction::checkURI($uri)) {
             return ActionRegularFunction::build($uri, $request, $props);
+        } elseif (ActionRemoteAPICall::checkURI($uri)) {
+            return ActionRemoteAPICall::build($uri, $request, $props);
         } else {
             throw new InvalidURIException("Invalid uri: $uri", 400);
         }
