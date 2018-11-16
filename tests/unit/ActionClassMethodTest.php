@@ -1,94 +1,58 @@
 <?php
+
+namespace tests\eduluz1976\unit;
+
+use eduluz1976\action\Action;
+
 /**
- * Created by PhpStorm.
- * User: eduardoluz
- * Date: 2018-09-18
- * Time: 4:47 PM
+ * Class ActionClassMethodTest
+ * @package tests\eduluz1976\unit
  */
-
-namespace eduluz1976\action;
-
-
-class MySampleClass {
-
-    protected $suffix = '_123';
-
-
-    public function test1() {
-        return date('Ymd').$this->suffix;
-    }
-
-}
-
-class MySampleClass2 {
-
-    use \eduluz1976\action\DBAccessible;
-
-    protected $suffix = '_123';
-    protected $list = [];
-
-    public function __construct($first,$second,$third,$fourth)
-    {
-        $this->list = [
-            $first,$second,$third,$fourth
-        ];
-    }
-
-    public function test1() {
-        return $this->list;
-    }
-
-    public function test2() {
-
-        $sql = "INSERT INTO my_test (col1,col2,col3,col4) VALUES (?,?,?,?)";
-
-        $statement = $this->getConn()->prepare($sql);
-
-        $result = $statement->execute($this->list);
-
-    }
-
-}
-
-
 class ActionClassMethodTest extends \PHPUnit\Framework\TestCase
 {
-
+    /**
+     * Tests if the object created have the right method name.
+     *
+     * @throws \eduluz1976\action\exception\InvalidURIException
+     */
     public function testGetFunctionName()
     {
-
-        $action = Action::factory('\eduluz1976\action\MySampleClass::test1()');
-
+        $action = Action::factory('tests\eduluz1976\unit\MySampleClass::test1()');
 
         $this->assertEquals('test1', $action->getMethodName());
-
     }
 
-
+    /**
+     * Tests if is possible overwrite the method name programaticaly.
+     *
+     * @throws \eduluz1976\action\exception\InvalidURIException
+     */
     public function testSetFunctionName()
     {
-        $action = Action::factory('\eduluz1976\action\MySampleClass::test1()');
+        $action = Action::factory('tests\eduluz1976\unit\MySampleClass::test1()');
         $action->setMethodName('test2');
 
         $this->assertEquals('test2', $action->getMethodName());
-
     }
 
-
-
+    /**
+     * Tests if constructor class receive the right number of parameters
+     *
+     * @throws \eduluz1976\action\exception\FunctionNotFoundException
+     * @throws \eduluz1976\action\exception\InvalidURIException
+     */
     public function testConstructor2Params()
     {
-
-
-        $action = Action::factory('\eduluz1976\action\MySampleClass2::test1()',
+        $action = Action::factory(
+            'tests\eduluz1976\unit\MySampleClass2::test1()',
             [],
-            ['constructor'=>[
+            ['constructor' => [
                 '1st',
                 '2nd',
-                '3rd'
-                ,
+                '3rd',
                 '4th'
-            ]]);
+            ]]
+        );
         $response = $action->exec();
 
         $this->assertCount(4, $response);
@@ -96,39 +60,39 @@ class ActionClassMethodTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('2nd', $response[1]);
     }
 
-
-
-
+    /**
+     * Tests if execution of method is ok.
+     *
+     * @throws \eduluz1976\action\exception\FunctionNotFoundException
+     * @throws \eduluz1976\action\exception\InvalidURIException
+     */
     public function testExec()
     {
-
-        $action = Action::factory('\eduluz1976\action\MySampleClass::test1()');
+        $action = Action::factory('tests\eduluz1976\unit\MySampleClass::test1()');
         $response = $action->exec();
 
-        $this->assertEquals(date('Ymd').'_123', $response);
+        $this->assertEquals(date('Ymd') . '_123', $response);
     }
-
 
     /**
      * Tests if the dyn object (Action) can access the global DB Connection properly
-     * @throws exception\InvalidURIException
+     *
+     * @throws \eduluz1976\action\exception\FunctionNotFoundException
+     * @throws \eduluz1976\action\exception\InvalidURIException
      */
     public function testDBAccessibleAttached()
     {
-
         $pdo = new \PDO('sqlite::memory:');
 
-        $pdo->exec("CREATE TABLE my_test (col1 INTEGER , col2 INTEGER , col3 INTEGER , col4 INTEGER )");
+        $pdo->exec('CREATE TABLE my_test (col1 INTEGER , col2 INTEGER , col3 INTEGER , col4 INTEGER )');
 
-
-        $action = Action::factory('\eduluz1976\action\MySampleClass2::test2()',[],  ['constructor'=>[1,2,3,4]]);
+        $action = Action::factory('tests\eduluz1976\unit\MySampleClass2::test2()', [], ['constructor' => [1, 2, 3, 4]]);
 
         $action->setConn($pdo);
 
         $action->exec();
 
-
-        $sql = "SELECT col1+col2+col3+col4 as total FROM my_test";
+        $sql = 'SELECT col1+col2+col3+col4 as total FROM my_test';
 
         $statement = $action->getConn()->query($sql);
 
@@ -136,10 +100,8 @@ class ActionClassMethodTest extends \PHPUnit\Framework\TestCase
 
         $value = $results[0];
 
-        $this->assertEquals(10,$value);
+        $this->assertEquals(10, $value);
 
-        $this->assertTrue(method_exists($action,'getConn'));
+        $this->assertTrue(method_exists($action, 'getConn'));
     }
-
-
 }

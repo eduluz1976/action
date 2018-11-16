@@ -5,11 +5,7 @@ namespace eduluz1976\action;
 use GuzzleHttp\Exception\GuzzleException;
 use Psr\Http\Message\ResponseInterface;
 
-/**
- * Class ActionRemoteAPICall
- * @package eduluz1976\action
- */
-class ActionRemoteAPICall extends Action
+class ActionURLCall extends Action
 {
     protected $method;
     protected $schema;
@@ -330,6 +326,14 @@ class ActionRemoteAPICall extends Action
         $this->setQuery($query);
         $this->setFragment($fragment);
 
+        if ($query) {
+            $auxRequest = [];
+            parse_str($query, $auxRequest);
+            if (is_array($auxRequest)) {
+                $request = array_replace($auxRequest, $request);
+            }
+        }
+
         $this->getRequest()->addList($request);
     }
 
@@ -368,7 +372,7 @@ class ActionRemoteAPICall extends Action
         $query = (isset($parts['query'])) ? $parts['query'] : null;
         $fragment = (isset($parts['fragment'])) ? $parts['fragment'] : null;
 
-        $obj = new ActionRemoteAPICall(strtoupper($method), $schema, $user, $pass, $host, $port, $path, $query, $fragment, $request);
+        $obj = new ActionURLCall(strtoupper($method), $schema, $user, $pass, $host, $port, $path, $query, $fragment, $request);
 
         if (!empty($props)) {
             $obj->getOptions()->addList($props);

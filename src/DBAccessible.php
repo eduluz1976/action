@@ -1,8 +1,9 @@
 <?php
+
 namespace eduluz1976\action;
 
-trait DBAccessible {
-
+trait DBAccessible
+{
     /**
      * @var \PDO
      */
@@ -23,8 +24,4 @@ trait DBAccessible {
     {
         $this->conn = $conn;
     }
-
-
-
-
 }

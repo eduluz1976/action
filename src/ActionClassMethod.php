@@ -2,15 +2,13 @@
 
 namespace eduluz1976\action;
 
-
 class ActionClassMethod extends Action
 {
     use DBAccessible;
 
-
     protected $className;
     protected $methodName;
-    protected $constructorParameters=[];
+    protected $constructorParameters = [];
 
     /**
      * @return mixed
@@ -66,15 +64,12 @@ class ActionClassMethod extends Action
         return $this;
     }
 
-
-
-
     /**
      * ActionRegularFunction constructor.
      * @param string $functionName
      * @param array $request
      */
-    public function __construct($className, $methodName, $request=[])
+    public function __construct($className, $methodName, $request = [])
     {
         $this->setClassName($className);
         $this->setMethodName($methodName);
@@ -88,13 +83,13 @@ class ActionClassMethod extends Action
      * @param $uri
      * @return bool
      */
-    public static function checkURI($uri) {
-        if ((strpos($uri, '::')!==false) && (substr($uri,-2) == '()')) {
+    public static function checkURI($uri)
+    {
+        if ((strpos($uri, '::') !== false) && (substr($uri, -2) == '()')) {
             return true;
         } else {
             return false;
         }
-
     }
 
     /**
@@ -103,10 +98,10 @@ class ActionClassMethod extends Action
      * @param array $props
      * @return ActionClassMethod
      */
-    public static function build($uri, $request=[], $props=[]) {
-
-        $className = substr($uri,0,strpos($uri,'::'));
-        $methodName = substr($uri,strpos($uri,'::')+2,-2);
+    public static function build($uri, $request = [], $props = [])
+    {
+        $className = substr($uri, 0, strpos($uri, '::'));
+        $methodName = substr($uri, strpos($uri, '::') + 2, -2);
 
         $obj = new ActionClassMethod($className, $methodName, $request);
 
@@ -121,7 +116,8 @@ class ActionClassMethod extends Action
      * @param array $additionalRequestAttributes
      * @return mixed|void
      */
-    public function exec(array $additionalRequestAttributes=[]) {
+    public function exec(array $additionalRequestAttributes = [])
+    {
         parent::exec($additionalRequestAttributes);
 
         $className = $this->getClassName();
@@ -133,20 +129,16 @@ class ActionClassMethod extends Action
 
         $runner = [$obj, $this->getMethodName()];
         $return = call_user_func_array($runner, $this->getRequest()->getList());
-        $this->getResponse()->add(0,$return);
+        $this->getResponse()->add(0, $return);
         return $return;
     }
 
-
-    protected function preparePlugins(&$obj) {
-
+    protected function preparePlugins(&$obj)
+    {
         $traits = class_uses($obj);
 
         if (in_array('eduluz1976\action\DBAccessible', $traits) && $this->getConn()) {
             $obj->setConn($this->getConn());
         }
-
-
     }
-
 }

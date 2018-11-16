@@ -2,28 +2,28 @@
 
 namespace eduluz1976\action;
 
-class Parameters {
-
-    protected $attributes=[];
-
+class Parameters
+{
+    protected $attributes = [];
 
     /**
      * @param $name
      * @param $value
      * @return $this
      */
-    public function add($name,$value) {
+    public function add($name, $value)
+    {
         $this->attributes[$name] = $value;
         return $this;
     }
-
 
     /**
      * @param $name
      * @param null|mixed $defaultValue
      * @return mixed|null
      */
-    public function get($name, $defaultValue=null) {
+    public function get($name, $defaultValue = null)
+    {
         if (isset($this->attributes[$name])) {
             return $this->attributes[$name];
         }
@@ -31,21 +31,21 @@ class Parameters {
         return $defaultValue;
     }
 
-
     /**
      * @param array $list
      * @return $this
      */
-    public function addList(array $list) {
+    public function addList(array $list)
+    {
         $this->attributes = array_replace($this->attributes, $list);
         return $this;
     }
 
-
     /**
      * @return array
      */
-    public function getList() {
+    public function getList()
+    {
         return $this->attributes;
     }
 
@@ -53,7 +53,8 @@ class Parameters {
      * @param $name
      * @return bool
      */
-    public function del($name) {
+    public function del($name)
+    {
         if (isset($this->attributes[$name])) {
             unset($this->attributes[$name]);
             return true;
@@ -62,13 +63,12 @@ class Parameters {
         }
     }
 
-
     /**
      * @param $name
      * @return bool
      */
-    public function has($name) {
+    public function has($name)
+    {
         return (true === isset($this->attributes[$name]));
     }
-
 }

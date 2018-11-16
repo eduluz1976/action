@@ -1,10 +1,7 @@
 <?php
 
-
-
-class Server {
-
-
+class Server
+{
     protected $routes = [
         'GET' => [
             '/' => 'getRoot',
@@ -30,162 +27,151 @@ class Server {
         ]
     ];
 
+    public function run()
+    {
+        $uri = $_SERVER['REQUEST_URI'] ?? '/';
+        $httpMethod = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 
-
-
-    public function run() {
-
-        $uri = $_SERVER['REQUEST_URI']??'/';
-        $httpMethod = $_SERVER['REQUEST_METHOD']??'GET';
-
-        $methods = $this->routes[$httpMethod]??false;
+        $methods = $this->routes[$httpMethod] ?? false;
 
         $method = 'undefined';
 
         if ($methods) {
-            $method = $methods[$uri]??'undefined';
+            $method = $methods[$uri] ?? 'undefined';
         }
 
         $this->$method();
-
     }
 
-
-    protected function undefined() {
-        $this->doReturn(['msg'=>'Undefined call'],403);
+    protected function undefined()
+    {
+        $this->doReturn(['msg' => 'Undefined call'], 403);
     }
 
-
-    protected function getRoot() {
+    protected function getRoot()
+    {
         $lsHeaders = getallheaders();
 
-        if (isset($lsHeaders['token']) && ($lsHeaders['token']=='12345')) {
+        if (isset($lsHeaders['token']) && ($lsHeaders['token'] == '12345')) {
             header('token: 23456');
-            $this->doReturn(['root'=>true]);
+            $this->doReturn(['root' => true]);
         } else {
-            $this->doReturn(['msg'=>'Auth required'],403);
+            $this->doReturn(['msg' => 'Auth required'], 403);
         }
-
     }
 
-    protected function listUsers() {
-        $this->doReturn(['users'=>[
+    protected function listUsers()
+    {
+        $this->doReturn(['users' => [
             [
-            'id'=>1,'name'=>'John','surname'=>'Doe'
-                ],[
-            'id'=>2,'name'=>'Mary','surname'=>'Popkin'],[
-            'id'=>3,'name'=>'Peter','surname'=>'McCain'
-                ]
+                'id' => 1, 'name' => 'John', 'surname' => 'Doe'
+            ], [
+                'id' => 2, 'name' => 'Mary', 'surname' => 'Popkin'], [
+                'id' => 3, 'name' => 'Peter', 'surname' => 'McCain'
+            ]
         ]]);
     }
 
-
-    protected function getUser() {
+    protected function getUser()
+    {
         $this->doReturn([
-            'id'=>1,
-            'name'=>'John',
-            'surname'=>'Doe'
+            'id' => 1,
+            'name' => 'John',
+            'surname' => 'Doe'
         ]);
     }
 
-    protected function auth() {
-
+    protected function auth()
+    {
         $lsHeaders = getallheaders();
 
         if (isset($lsHeaders['Authorization']) && ($lsHeaders['Authorization'] == 'basic 12345')) {
             $this->doReturn([
-                'success'=>true,
+                'success' => true,
                 'token' => '12345'
             ], 200);
         } else {
-
             $this->doReturn([
-                'success'=>false,
+                'success' => false,
                 'msg' => 'Authentication failure'
-
             ], 403);
         }
-
     }
 
-    protected function auth2() {
-
+    protected function auth2()
+    {
         $lsHeaders = getallheaders();
 
-
-        if ((isset($_SERVER['PHP_AUTH_USER']) && ($_SERVER['PHP_AUTH_USER']=='username')) &&
-            (isset($_SERVER['PHP_AUTH_PW']) && ($_SERVER['PHP_AUTH_PW'] =='password'))) {
-
+        if ((isset($_SERVER['PHP_AUTH_USER']) && ($_SERVER['PHP_AUTH_USER'] == 'username')) &&
+            (isset($_SERVER['PHP_AUTH_PW']) && ($_SERVER['PHP_AUTH_PW'] == 'password'))) {
             header('token: 23456');
 
             $this->doReturn([
-                'success'=>true
+                'success' => true
             ], 200);
-
         } else {
             $this->doReturn([
-                'success'=>false,
+                'success' => false,
                 'msg' => 'Authentication failure'
-
             ], 403);
         }
-
     }
 
-    protected function createUser() {
+    protected function createUser()
+    {
         $this->doReturn([
-            "id" => 1,
-            "name" => $_POST['name']
-        ],201);
+            'id' => 1,
+            'name' => $_POST['name']
+        ], 201);
     }
 
-    protected function updateUser() {
+    protected function updateUser()
+    {
         $this->doReturn(
             [],
             204
         );
     }
 
-    protected function deleteUser() {
+    protected function deleteUser()
+    {
         $this->doReturn(
             [],
             204
         );
     }
 
-
-    protected function invalidAuth() {
+    protected function invalidAuth()
+    {
         $this->doReturn(
-            ['msg'=>'invalid credentials'],
+            ['msg' => 'invalid credentials'],
             403
         );
     }
 
-
-    protected function getXML() {
+    protected function getXML()
+    {
         $s = '<user><name>John</name><surname>Doe</surname></user>';
-        $this->doReturnXML($s,200);
+        $this->doReturnXML($s, 200);
     }
 
-
-
-    protected function getLines() {
+    protected function getLines()
+    {
         $s = "line1\nline2\nline3";
-        $this->doReturnXML($s,200);
+        $this->doReturnXML($s, 200);
     }
 
-
-
-    protected function doReturn($s, $code=200) {
+    protected function doReturn($s, $code = 200)
+    {
         http_response_code($code);
         echo json_encode($s);
         exit;
     }
 
-    protected function doReturnXML($s, $code=200) {
+    protected function doReturnXML($s, $code = 200)
+    {
         http_response_code($code);
         echo $s;
         exit;
     }
-
 }

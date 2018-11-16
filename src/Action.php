@@ -1,16 +1,15 @@
 <?php
-namespace eduluz1976\action;
 
+namespace eduluz1976\action;
 
 use eduluz1976\action\exception\InvalidURIException;
 
-abstract class Action {
-
+abstract class Action
+{
     /**
      * @var Parameters
      */
     protected $request;
-
 
     /**
      * @var Parameters
@@ -28,40 +27,38 @@ abstract class Action {
      */
     protected $uri;
 
-
     /**
      * @param string $uri
      * @param array $request
      * @param array $props
      * @throws InvalidURIException
      */
-    public static function factory($uri, $request=[], $props=[]) {
-
-       if (ActionRemoteAPICall::checkURI($uri)) {
-           return ActionRemoteAPICall::build($uri, $request, $props);
-       } elseif (ActionClassMethod::checkURI($uri)) {
-           return ActionClassMethod::build($uri, $request, $props);
-       } elseif (ActionRegularFunction::checkURI($uri)) {
-           return ActionRegularFunction::build($uri, $request, $props);
-       } else {
-           throw new InvalidURIException("Invalid uri: $uri", 400);
-       }
-
+    public static function factory($uri, $request = [], $props = [])
+    {
+        if (ActionURLCall::checkURI($uri)) {
+            return ActionURLCall::build($uri, $request, $props);
+        } elseif (ActionClassMethod::checkURI($uri)) {
+            return ActionClassMethod::build($uri, $request, $props);
+        } elseif (ActionRegularFunction::checkURI($uri)) {
+            return ActionRegularFunction::build($uri, $request, $props);
+        } elseif (ActionRemoteAPICall::checkURI($uri)) {
+            return ActionRemoteAPICall::build($uri, $request, $props);
+        } else {
+            throw new InvalidURIException("Invalid uri: $uri", 400);
+        }
     }
 
-
-
     abstract public static function checkURI($uri);
-    abstract public static function build($uri);
 
+    abstract public static function build($uri);
 
     /**
      * @param array $additionalRequestAttributes
      */
-    public function exec(array $additionalRequestAttributes=[]) {
+    public function exec(array $additionalRequestAttributes = [])
+    {
         $this->getRequest()->addList($additionalRequestAttributes);
     }
-
 
     /**
      * @return Parameters
@@ -105,9 +102,4 @@ abstract class Action {
         $this->response = $response;
         return $this;
     }
-
-
-
-
-
 }

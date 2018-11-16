@@ -1,28 +1,41 @@
 <?php
-namespace eduluz1976\action;
 
+namespace tests\eduluz1976\unit;
 
+use eduluz1976\action\Parameters;
 use PHPUnit\Framework\TestCase;
 
-class ParametersTest extends \PHPUnit\Framework\TestCase
+/**
+ * Class ParametersTest
+ * @package tests\eduluz1976\unit
+ */
+class ParametersTest extends TestCase
 {
-    public function testAddValue() {
-
+    /**
+     * Test add some value on object
+     *
+     * @throws \Exception
+     */
+    public function testAddValue()
+    {
         $originalName = 'John';
         $attrName = 'name';
 
         $p = new Parameters();
-        $p->add($attrName,$originalName);
+        $p->add($attrName, $originalName);
 
         $name = $p->get($attrName);
 
         $this->assertEquals($originalName, $name);
     }
 
-
-
-    public function testAddSetOfValues() {
-
+    /**
+     * Test add an associative array to an Parameter instance
+     *
+     * @throws \Exception
+     */
+    public function testAddSetOfValues()
+    {
         $attributes = [
             'name' => 'John',
             'surname' => 'Doe',
@@ -36,8 +49,13 @@ class ParametersTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(count($attributes), $p->getList());
     }
 
-
-    public function testRemoveValue() {
+    /**
+     * Test remove an item value.
+     *
+     * @throws \Exception
+     */
+    public function testRemoveValue()
+    {
         $attributes = [
             'name' => 'John',
             'surname' => 'Doe',
@@ -50,11 +68,16 @@ class ParametersTest extends \PHPUnit\Framework\TestCase
 
         $p->del('country');
 
-        $this->assertCount(count($attributes)-1, $p->getList());
+        $this->assertCount(count($attributes) - 1, $p->getList());
     }
 
-
-    public function testHasAttribute() {
+    /**
+     * Test if the method 'has' works.
+     *
+     * @throws \Exception
+     */
+    public function testHasAttribute()
+    {
         $attributes = [
             'name' => 'John',
             'surname' => 'Doe',
@@ -67,8 +90,5 @@ class ParametersTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($p->has('country'));
         $this->assertFalse($p->has('age'));
-
     }
-
-
 }

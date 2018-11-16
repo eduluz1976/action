@@ -9,10 +9,11 @@
             "email": "eduluz1976@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
-            "eduluz1976\\action\\": "src/"
+            "eduluz1976\\action\\": "src/",
+            "tests\\eduluz1976\\":"tests/"
         }
     },
 
@@ -20,6 +21,7 @@
         "guzzlehttp/guzzle": "^6.3"
     },
     "require-dev": {
-        "phpunit/phpunit": "=7.0"
+        "phpunit/phpunit": "=7.0",
+        "vlucas/phpdotenv": "^2.5@dev"
     }
 }
