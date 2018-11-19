@@ -5,6 +5,10 @@ namespace eduluz1976\action;
 use GuzzleHttp\Exception\GuzzleException;
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * Class ActionURLCall
+ * @package eduluz1976\action
+ */
 class ActionURLCall extends Action
 {
     protected $method;

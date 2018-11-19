@@ -64,9 +64,11 @@ class ActionClassMethod extends Action
         return $this;
     }
 
+
     /**
-     * ActionRegularFunction constructor.
-     * @param string $functionName
+     * ActionClassMethod constructor.
+     * @param string $className
+     * @param string $methodName
      * @param array $request
      */
     public function __construct($className, $methodName, $request = [])
