@@ -16,4 +16,8 @@ class MySampleClass
     {
         return date('Ymd') . $this->suffix;
     }
+
+    public function enclose($string, $left='[[', $right=']]') {
+        return $left.$string.$right;
+    }
 }

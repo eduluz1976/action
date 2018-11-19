@@ -34,8 +34,9 @@ class ActionRemoteAPICall extends ActionClassMethod
      */
     public static function build($uri, $request = [], $props = [])
     {
-        $className = substr($uri, 6, strpos($uri, '::'));
+        $className = substr($uri, 6, strpos($uri, '::')-6);
         $methodName = substr($uri, strpos($uri, '::') + 2, -2);
+
 
         $obj = new ActionRemoteAPICall($className, $methodName, $request);
        return $obj;
