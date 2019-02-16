@@ -2,6 +2,8 @@
 
 namespace eduluz1976\action;
 
+use eduluz1976\action\exception\FunctionNotFoundException;
+
 class ActionClassMethod extends Action
 {
     use DBAccessible;
@@ -130,6 +132,10 @@ class ActionClassMethod extends Action
         $this->preparePlugins($obj);
 
         $runner = [$obj, $this->getMethodName()];
+        if (!is_callable($runner)) {
+            $methodName = $this->getMethodName();
+            throw new FunctionNotFoundException("Error: this method/class does not exists ($className::$methodName)",1);
+        }
         $return = call_user_func_array($runner, $this->getRequest()->getList());
         $this->getResponse()->add(0, $return);
         return $return;
